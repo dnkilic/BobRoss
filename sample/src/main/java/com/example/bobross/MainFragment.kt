@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import com.example.bobross.base.fragment.BaseFragment
 import com.example.bobross.databinding.MainFragmentBinding
 import com.example.bobross.di.ViewModelProviderFactory
@@ -27,6 +28,10 @@ class MainFragment : BaseFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = factory.get(this, MainViewModel::class)
+        viewModel.getPosts()
+        viewModel.posts.observe(this, Observer {
+
+        })
     }
 
 }

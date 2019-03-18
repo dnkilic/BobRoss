@@ -4,6 +4,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import org.junit.runner.RunWith
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.bobross.repository.model.*
+import kotlinx.coroutines.runBlocking
 import org.junit.Rule
 import org.junit.Test
 import org.hamcrest.MatcherAssert
@@ -22,20 +23,20 @@ class PostDataDaoTest : DbTest() {
     }
 
     @Test
-    fun insertAndReadPost() {
+    fun insertAndReadPost() = runBlocking  {
         // Act
         db.postDao().insertPost(POST.copy(id = "1", width = 0, height = 0, color = "foo"))
         val queried = db.postDao().getPost("1")
 
         // Verify
         MatcherAssert.assertThat(queried, CoreMatchers.notNullValue())
-        MatcherAssert.assertThat(queried.width, CoreMatchers.`is`(0))
-        MatcherAssert.assertThat(queried.height, CoreMatchers.`is`(0))
-        MatcherAssert.assertThat(queried.color, CoreMatchers.`is`("foo"))
+        MatcherAssert.assertThat(queried?.width, CoreMatchers.`is`(0))
+        MatcherAssert.assertThat(queried?.height, CoreMatchers.`is`(0))
+        MatcherAssert.assertThat(queried?.color, CoreMatchers.`is`("foo"))
     }
 
     @Test
-    fun updatePost() {
+    fun updatePost() = runBlocking  {
         // Act
         db.postDao().insertPost(POST.copy(id = "2", width = 0, height = 0, color = "foo"))
         db.postDao().insertPost(POST.copy(id = "2", width = 5, height = 5, color = "bar"))
@@ -43,13 +44,13 @@ class PostDataDaoTest : DbTest() {
 
         // Verify
         MatcherAssert.assertThat(queried, CoreMatchers.notNullValue())
-        MatcherAssert.assertThat(queried.height, CoreMatchers.`is`(5))
-        MatcherAssert.assertThat(queried.color, CoreMatchers.`is`("bar"))
-        MatcherAssert.assertThat(queried.width, CoreMatchers.`is`(5))
+        MatcherAssert.assertThat(queried?.height, CoreMatchers.`is`(5))
+        MatcherAssert.assertThat(queried?.color, CoreMatchers.`is`("bar"))
+        MatcherAssert.assertThat(queried?.width, CoreMatchers.`is`(5))
     }
 
     @Test
-    fun deletePost() {
+    fun deletePost() = runBlocking {
         // Act
         db.postDao().insertPost(POST.copy(id = "10"))
         db.postDao().deletePostById("10")
@@ -66,18 +67,18 @@ class PostDataDaoTest : DbTest() {
     }
 
     @Test
-    fun insertAndReadPosts() {
+    fun insertAndReadPosts() = runBlocking {
         // Act
         db.postDao().insertPosts(listOf(POST.copy(id = "1"), POST.copy(id = "2"), POST.copy(id = "3")))
         val queried = db.postDao().getPosts()
 
         // Verify
         MatcherAssert.assertThat(queried, CoreMatchers.notNullValue())
-        MatcherAssert.assertThat(queried.size, CoreMatchers.`is`(3))
+        MatcherAssert.assertThat(queried?.size, CoreMatchers.`is`(3))
     }
 
     @Test
-    fun insertAndReadDetailedInformation() {
+    fun insertAndReadDetailedInformation() = runBlocking {
         // Act
         db.postDao().insertPosts(listOf(POST.copy(id = "1", user = USER.copy(links = LINKS.copy(html = "foo", likes = "bar"))),
             POST.copy(id = "2"), POST.copy(id = "3")))
@@ -85,8 +86,8 @@ class PostDataDaoTest : DbTest() {
 
         // Verify
         MatcherAssert.assertThat(queried, CoreMatchers.notNullValue())
-        MatcherAssert.assertThat(queried.user.links.html, CoreMatchers.`is`("foo"))
-        MatcherAssert.assertThat(queried.user.links.likes, CoreMatchers.`is`("bar"))
+        MatcherAssert.assertThat(queried?.user?.links?.html, CoreMatchers.`is`("foo"))
+        MatcherAssert.assertThat(queried?.user?.links?.likes, CoreMatchers.`is`("bar"))
     }
 
     companion object {

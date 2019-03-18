@@ -70,7 +70,7 @@ class AppModule {
 
     @Singleton
     @Provides
-    fun provideNewsRepository(localDataSource: LocalDataSource,
-                              remoteDataSource: RemoteDataSource): PostRepository =
+    fun providePostsRepository(localDataSource: LocalDataSource,
+                               remoteDataSource: RemoteDataSource): PostRepository =
         PostRepository(localDataSource, remoteDataSource)
 }

@@ -5,12 +5,6 @@ import com.example.bobross.repository.model.Post
 import javax.inject.Inject
 
 class LocalDataSource @Inject constructor(private val postsDatabase: PostsDatabase) {
-
-    fun getPosts(): List<Post> {
-        return emptyList()
-    }
-
-    fun savePosts(posts: List<Post>) {
-        // TODO save data via Room
-    }
+    suspend fun getPosts() = postsDatabase.postDao().getPosts()
+    suspend fun savePosts(posts: List<Post>) = postsDatabase.postDao().insertPosts(posts)
 }
