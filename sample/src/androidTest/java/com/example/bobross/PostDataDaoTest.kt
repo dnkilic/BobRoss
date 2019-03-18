@@ -85,8 +85,8 @@ class PostDataDaoTest : DbTest() {
 
         // Verify
         MatcherAssert.assertThat(queried, CoreMatchers.notNullValue())
-        MatcherAssert.assertThat(queried.user!!.links.html, CoreMatchers.`is`("foo"))
-        MatcherAssert.assertThat(queried.user!!.links.likes, CoreMatchers.`is`("bar"))
+        MatcherAssert.assertThat(queried.user.links.html, CoreMatchers.`is`("foo"))
+        MatcherAssert.assertThat(queried.user.links.likes, CoreMatchers.`is`("bar"))
     }
 
     companion object {
