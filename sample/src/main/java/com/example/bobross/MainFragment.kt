@@ -1,16 +1,18 @@
 package com.example.bobross
 
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import com.example.bobross.base.fragment.BaseFragment
 import com.example.bobross.databinding.MainFragmentBinding
+import com.example.bobross.di.ViewModelProviderFactory
+import javax.inject.Inject
 
-class MainFragment : Fragment() {
+class MainFragment : BaseFragment() {
 
+    @Inject lateinit var factory: ViewModelProviderFactory
     private lateinit var viewModel: MainViewModel
 
     override fun onCreateView(
@@ -24,8 +26,7 @@ class MainFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
-        // TODO: Use the ViewModel
+        viewModel = factory.get(this, MainViewModel::class)
     }
 
 }

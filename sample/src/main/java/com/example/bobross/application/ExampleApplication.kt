@@ -1,13 +1,26 @@
 package com.example.bobross.application
 
-import android.app.Application
+import com.example.bobross.di.DaggerAppComponent
 import com.squareup.leakcanary.LeakCanary
+import dagger.android.AndroidInjector
+import dagger.android.support.DaggerApplication
 
-class ExampleApplication : Application() {
+class ExampleApplication : DaggerApplication() {
 
     override fun onCreate() {
         super.onCreate()
         setupLeakCanary()
+    }
+
+    override fun applicationInjector(): AndroidInjector<out DaggerApplication> {
+        val appComponent =
+            DaggerAppComponent
+                .builder()
+                .application(this)
+                .build()
+
+        appComponent.inject(this)
+        return appComponent
     }
 
     private fun setupLeakCanary() {
