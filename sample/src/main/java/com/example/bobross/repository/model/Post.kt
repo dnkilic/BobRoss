@@ -1,17 +1,19 @@
 package com.example.bobross.repository.model
 
+import androidx.room.*
 import com.google.gson.annotations.SerializedName
 
+@Entity(tableName = "post")
 data class Post(
-    val categories: List<Category>,
-    val color: String,
-    @SerializedName("created_at") val createdAt: String,
-    val height: Int,
-    val id: String,
-    @SerializedName("liked_by_user") val likedByUser: Boolean,
-    val likes: Int,
-    val links: Links,
-    val urls: Urls,
-    val user: User,
-    val width: Int
+    @ColumnInfo var categories: List<Category>?,
+    @ColumnInfo var color: String,
+    @ColumnInfo @SerializedName("created_at") var createdAt: String,
+    @ColumnInfo var height: Int,
+    @ColumnInfo var width: Int,
+    @PrimaryKey var id: String,
+    @ColumnInfo @SerializedName("liked_by_user") var likedByUser: Boolean,
+    @ColumnInfo var likes: Int,
+    @ColumnInfo var links: Links,
+    @ColumnInfo var urls: Urls?,
+    @ColumnInfo var user: User?
 )
