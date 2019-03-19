@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">Sample</string>
+    <string name="content_description_image">image</string>
+    <string name="content_description_profile_image">profile image</string>
+
+    <plurals name="like">
+        <item quantity="zero">%1$d like</item>
+        <item quantity="one">%1$d like</item>
+        <item quantity="other">%1$d likes</item>
+    </plurals>
 </resources>
