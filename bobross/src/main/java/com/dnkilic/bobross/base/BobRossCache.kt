@@ -1,4 +1,4 @@
-package com.dnkilic.bobross.cache
+package com.dnkilic.bobross.base
 
 import android.util.LruCache
 

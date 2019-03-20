@@ -2,15 +2,18 @@ package com.dnkilic.bobross
 
 import android.content.Context
 import android.widget.ImageView
+import com.dnkilic.bobross.content.OnContentLoad
+import com.dnkilic.bobross.content.json.ContentFetcher
+import com.dnkilic.bobross.content.model.HttpMethod
 import com.dnkilic.bobross.image.ImageStyle
 import com.dnkilic.bobross.image.BitmapFetcher
-import org.json.JSONObject
 import java.lang.ref.WeakReference
 
 class BobRoss {
 
     private var url: String? = null
     private var imageStyle: ImageStyle? = null
+    private var listener: OnContentLoad? = null
 
     companion object {
         private var context: WeakReference<Context>? = null
@@ -26,6 +29,14 @@ class BobRoss {
             }
 
             this.context = WeakReference(context)
+            this.bobRoss = WeakReference(BobRoss())
+            return bobRoss.get()!!
+        }
+
+        /**
+         * Load Json document
+         */
+        fun content(): BobRoss {
             this.bobRoss = WeakReference(BobRoss())
             return bobRoss.get()!!
         }
@@ -49,6 +60,23 @@ class BobRoss {
     }
 
     /**
+     * Load content with request method
+     * @param url
+     * @param listener
+     */
+    fun request(url: String?, listener: OnContentLoad?) {
+        requireNotNull(url) {
+            "Url should not be null."
+        }
+
+        this.url = url
+        this.listener = listener
+
+        val fetcher = ContentFetcher(url, HttpMethod.GET , listener)
+        fetcher.fetch()
+    }
+
+    /**
      * Apply image style
      * Currently only supports rounded image style
      * @param imageStyle
@@ -69,33 +97,5 @@ class BobRoss {
 
         val bitmapFetcher = BitmapFetcher(url, imageView)
         bitmapFetcher.fetch()
-    }
-
-    /**
-     * Load Json document
-     */
-    fun asJson(): JSONObject {
-        return JSONObject()
-    }
-
-    /**
-     * Load zip file and return its path?
-     */
-    fun asZip() {
-        // TODO implement later
-    }
-
-    /**
-     * Load Xml document
-     */
-    fun asXml() {
-        // TODO implement later
-    }
-
-    /**
-     * Load Pdf and return its path?
-     */
-    fun asPdf() {
-        // TODO implement later
     }
 }

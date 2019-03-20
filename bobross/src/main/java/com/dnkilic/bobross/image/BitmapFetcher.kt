@@ -2,13 +2,12 @@ package com.dnkilic.bobross.image
 
 import android.graphics.Bitmap
 import android.widget.ImageView
+import com.dnkilic.bobross.base.Fetcher
 import com.dnkilic.bobross.extension.getBitmapFromUrl
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
-import java.net.MalformedURLException
-import java.net.URL
 
-internal class BitmapFetcher(private val urlStr: String?, private val imageView: ImageView) {
+internal class BitmapFetcher(private val urlStr: String?, private val imageView: ImageView): Fetcher {
 
     private fun getBitmap(): Bitmap? {
         val bitmapCache = BitmapCache.getInstance()
@@ -23,21 +22,13 @@ internal class BitmapFetcher(private val urlStr: String?, private val imageView:
         return bitmap
     }
 
-    fun fetch() {
+    override fun fetch() {
         doAsync {
-            var url: URL? = null
-            try {
-                url = URL(urlStr)
-            } catch (e: MalformedURLException) {
-                requireNotNull(url) {"Invalid url : $urlStr"}
-            }
-            if (url != null) {
-                val bitmap = getBitmap()
-                uiThread {
-                    imageView.setImageBitmap(bitmap)
-                }
+            validateUrl(urlStr)
+            val bitmap = getBitmap()
+            uiThread {
+                imageView.setImageBitmap(bitmap)
             }
         }
     }
-
 }

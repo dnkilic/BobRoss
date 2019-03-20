@@ -1,7 +1,7 @@
 package com.dnkilic.bobross.image
 
 import android.graphics.Bitmap
-import com.dnkilic.bobross.cache.BobRossCache
+import com.dnkilic.bobross.base.BobRossCache
 
 internal class BitmapCache(size: Int): BobRossCache<Bitmap>(size) {
 
