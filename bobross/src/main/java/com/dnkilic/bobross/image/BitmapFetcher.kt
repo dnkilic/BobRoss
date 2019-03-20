@@ -11,7 +11,8 @@ import org.jetbrains.anko.uiThread
 internal class BitmapFetcher(
     private val urlStr: String?,
     private val imageView: ImageView,
-    private val imageStyle: ImageStyle?
+    private val imageStyle: ImageStyle?,
+    private val errorPlaceHolderRes: Int?
 ): Fetcher {
 
     private fun getBitmap(): Bitmap? {
@@ -33,11 +34,20 @@ internal class BitmapFetcher(
     }
 
     override fun fetch() {
-        doAsync {
+        doAsync(exceptionHandler = { throwable ->
+            throwable.printStackTrace()
+            errorPlaceHolderRes?.let { imageView.setImageResource(it) }
+        }) {
             validateUrl(urlStr)
             val bitmap = getBitmap()
             uiThread {
-                imageView.setImageBitmap(bitmap)
+                with(imageView) {
+                    if (bitmap != null) {
+                        setImageBitmap(bitmap)
+                    } else {
+                        errorPlaceHolderRes?.let { setImageResource(it) }
+                    }
+                }
             }
         }
     }

@@ -23,7 +23,6 @@
                 app:layout_constraintStart_toStartOf="@id/startGuideline"
                 app:roundedImageUrl="@{item.user.profileImage.medium}"
                 android:layout_marginTop="@dimen/post_detail_margin"
-                tools:background="@drawable/profile_place_holder"
                 android:contentDescription="@string/content_description_profile_image"/>
 
         <ImageView

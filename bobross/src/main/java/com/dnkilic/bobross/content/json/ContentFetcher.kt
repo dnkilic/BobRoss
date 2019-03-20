@@ -8,7 +8,7 @@ import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import java.net.URL
 
-class ContentFetcher(
+internal class ContentFetcher(
     private val urlStr: String?,
     private val httpMethod: HttpMethod = HttpMethod.GET,
     private val listener: OnContentLoad?

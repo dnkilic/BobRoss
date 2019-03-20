@@ -4,7 +4,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import java.net.URL
 
-fun String.getBitmapFromUrl(): Bitmap? {
+internal fun String.getBitmapFromUrl(): Bitmap? {
     var bitmap: Bitmap? = null
     try {
         val stream = URL(this).openStream()

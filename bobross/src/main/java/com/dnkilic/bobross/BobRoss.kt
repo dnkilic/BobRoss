@@ -2,6 +2,7 @@ package com.dnkilic.bobross
 
 import android.content.Context
 import android.widget.ImageView
+import androidx.annotation.DrawableRes
 import com.dnkilic.bobross.content.OnContentLoad
 import com.dnkilic.bobross.content.json.ContentFetcher
 import com.dnkilic.bobross.content.model.HttpMethod
@@ -13,6 +14,7 @@ class BobRoss {
 
     private var url: String? = null
     private var imageStyle: ImageStyle? = null
+    private var errorPlaceHolderRes: Int? = null
     private var listener: OnContentLoad? = null
 
     companion object {
@@ -95,7 +97,20 @@ class BobRoss {
             "ImageView should not be null."
         }
 
-        val bitmapFetcher = BitmapFetcher(url, imageView, imageStyle)
+        val bitmapFetcher = BitmapFetcher(url, imageView, imageStyle, errorPlaceHolderRes)
         bitmapFetcher.fetch()
+    }
+
+    /**
+     * Error placeholder
+     * @param errorPlaceHolderRes
+     */
+    fun error(@DrawableRes errorPlaceHolderRes: Int?): BobRoss {
+        requireNotNull(errorPlaceHolderRes) {
+            "Error resource should not be null."
+        }
+
+        this.errorPlaceHolderRes = errorPlaceHolderRes
+        return getBobRoss()
     }
 }

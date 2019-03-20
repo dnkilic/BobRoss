@@ -2,7 +2,7 @@ package com.dnkilic.bobross.extension
 
 import android.graphics.*
 
-fun Bitmap.getCircularBitmap(config: Bitmap.Config = Bitmap.Config.ARGB_8888): Bitmap {
+internal fun Bitmap.getCircularBitmap(config: Bitmap.Config = Bitmap.Config.ARGB_8888): Bitmap {
     // circle configuration
     val circlePaint = Paint().apply { isAntiAlias = true }
     val circleRadius = Math.max(width, height) / 2f
