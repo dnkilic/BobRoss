@@ -29,7 +29,7 @@ internal class BitmapFetcher(private val urlStr: String?, private val imageView:
             try {
                 url = URL(urlStr)
             } catch (e: MalformedURLException) {
-                e.printStackTrace()
+                requireNotNull(url) {"Invalid url : $urlStr"}
             }
             if (url != null) {
                 val bitmap = getBitmap()
