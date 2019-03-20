@@ -3,6 +3,7 @@ package com.dnkilic.bobross
 import android.content.Context
 import android.widget.ImageView
 import com.dnkilic.bobross.image.ImageStyle
+import com.dnkilic.bobross.repository.remote.DownloadManager
 import org.json.JSONObject
 import java.lang.ref.WeakReference
 
@@ -66,7 +67,8 @@ class BobRoss {
             "ImageView should not be null."
         }
 
-        // TODO load image from cache or network
+        val downloadManager = DownloadManager(url, imageView)
+        downloadManager.downloadBitmap()
     }
 
     /**
