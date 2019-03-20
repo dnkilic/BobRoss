@@ -3,8 +3,11 @@ package com.example.bobross
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.dnkilic.bobross.content.OnContentLoad
 import com.example.bobross.repository.PostRepository
 import com.example.bobross.repository.model.*
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.Types
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -22,13 +25,25 @@ class MainViewModel @Inject constructor(private var repository: PostRepository) 
 
     fun getPosts() {
         syncPosts.value = Command.Loading
-        CoroutineScope(Dispatchers.IO).launch {
-            val request = repository.getPostsFromAPI()
-            withContext(Dispatchers.Main) {
-                try {
-                    val response = request.await()
-                    if (response.isSuccessful) {
-                        val posts = response.body()
+
+        repository.getPostsFromAPI(object : OnContentLoad {
+            override fun onError(throwable: Throwable) {
+                CoroutineScope(Dispatchers.IO).launch {
+                    withContext(Dispatchers.Main) {
+                        val localPosts = repository.getPostsFromDB()
+                        if (localPosts != null && localPosts.isNotEmpty()) {
+                            syncPosts.value = Command.Success(localPosts)
+                        } else {
+                            onError(throwable)
+                        }
+                    }
+                }
+            }
+
+            override fun onSuccess(response: String) {
+                CoroutineScope(Dispatchers.IO).launch {
+                    withContext(Dispatchers.Main) {
+                        val posts = generateResponse(response)
                         if (posts != null && posts.isNotEmpty()) {
                             syncPosts.value = Command.Success(posts)
                             repository.savePosts(posts)
@@ -40,21 +55,16 @@ class MainViewModel @Inject constructor(private var repository: PostRepository) 
                                 onError(ExampleException(ERROR_POST_ARE_NOT_AVAILABLE))
                             }
                         }
-                    } else {
-                        val localPosts = repository.getPostsFromDB()
-                        if (localPosts != null && localPosts.isNotEmpty()) {
-                            syncPosts.value = Command.Success(localPosts)
-                        } else {
-                            onError(ExampleException(response.code()))
-                        }
                     }
-                } catch (exception: Exception) {
-                    onError(exception)
-                } catch (throwable: Throwable) {
-                    onError(throwable)
                 }
             }
-        }
+        })
+    }
+
+    private fun generateResponse(response: String): List<Post>? {
+        val types = Types.newParameterizedType(List::class.java, Post::class.java)
+        val adapter =  Moshi.Builder().build().adapter<List<Post>>(types)
+        return adapter.fromJson(response)
     }
 
     @VisibleForTesting
