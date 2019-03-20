@@ -95,7 +95,7 @@ class BobRoss {
             "ImageView should not be null."
         }
 
-        val bitmapFetcher = BitmapFetcher(url, imageView)
+        val bitmapFetcher = BitmapFetcher(url, imageView, imageStyle)
         bitmapFetcher.fetch()
     }
 }
