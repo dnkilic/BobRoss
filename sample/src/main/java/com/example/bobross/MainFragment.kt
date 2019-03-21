@@ -12,7 +12,9 @@ import com.example.bobross.base.fragment.BaseFragment
 import com.example.bobross.databinding.MainFragmentBinding
 import com.example.bobross.di.ViewModelProviderFactory
 import com.example.bobross.repository.model.Command
+import com.example.bobross.repository.model.NoteCommand
 import com.example.bobross.repository.model.Post
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.main_fragment.*
 import javax.inject.Inject
 
@@ -34,6 +36,7 @@ class MainFragment : BaseFragment() {
         dataset = mutableListOf()
         viewAdapter = PostAdapter(dataset)
         binding.recyclerView.adapter = viewAdapter
+        binding.fab.setOnClickListener { viewModel.getNote() }
 
         return binding.root
     }
@@ -58,6 +61,16 @@ class MainFragment : BaseFragment() {
                     error.visibility = View.VISIBLE
                     error.text = "Something went wrong"
                     // TODO handle errors properly
+                }
+            }
+        })
+
+        viewModel.notes.observe(this, Observer {
+            when (it) {
+                is NoteCommand.Loading -> progress.visibility = View.VISIBLE
+                is NoteCommand.Success -> {
+                    progress.visibility = View.GONE
+                    Snackbar.make(view!!, it.result, Snackbar.LENGTH_LONG).show()
                 }
             }
         })

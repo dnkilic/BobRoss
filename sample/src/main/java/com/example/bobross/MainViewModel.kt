@@ -19,13 +19,15 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(private var repository: PostRepository) : ViewModel() {
 
     private var syncPosts = MutableLiveData<Command>()
-
     val posts : MutableLiveData<Command>
         get() = syncPosts
 
+    private var syncNotes = MutableLiveData<NoteCommand>()
+    val notes : MutableLiveData<NoteCommand>
+        get() = syncNotes
+
     fun getPosts() {
         syncPosts.value = Command.Loading
-
         repository.getPostsFromAPI(object : OnContentLoad {
             override fun onError(throwable: Throwable) {
                 CoroutineScope(Dispatchers.IO).launch {
@@ -75,5 +77,36 @@ class MainViewModel @Inject constructor(private var repository: PostRepository) 
             is IOException -> Command.Error(ERROR_NETWORK)
             else -> Command.Error(ERROR_UNKNOWN)
         }
+    }
+
+    fun getNote() {
+        syncNotes.value = NoteCommand.Loading
+        repository.getNoteFromAPI(object : OnContentLoad {
+            override fun onError(throwable: Throwable) {
+                CoroutineScope(Dispatchers.IO).launch {
+                    withContext(Dispatchers.Main) {
+                        // Directly showing localized message by purpose
+                        syncNotes.value = NoteCommand.Success(throwable.localizedMessage)
+                    }
+                }
+            }
+
+            override fun onSuccess(response: String) {
+                CoroutineScope(Dispatchers.IO).launch {
+                    withContext(Dispatchers.Main) {
+                        val note = generateNote(response)
+                        syncNotes.value = NoteCommand.Success(note)
+                    }
+                }
+            }
+        })
+    }
+
+    private fun generateNote(response: String): String {
+        // XML parsing is not added by purpose
+        val xml = response.split("\n")
+        val heading = xml[4].trim().removePrefix("<heading>").removeSuffix("</heading>")
+        val body =  xml[5].trim().removePrefix("<body>").removeSuffix("</body>")
+        return "$heading: $body"
     }
 }

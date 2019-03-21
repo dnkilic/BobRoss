@@ -12,6 +12,7 @@ class PostRepository @Inject constructor(private val localDataSource: LocalDataS
                                          private val remoteDataSource: RemoteDataSource) {
     fun getPostsFromViaRetrofit() = remoteDataSource.getPostsAsync() // Not used by purpose. Please see Readme file.
     fun getPostsFromAPI(onContentLoad: OnContentLoad) = remoteDataSource.getPosts(onContentLoad)
+    fun getNoteFromAPI(onContentLoad: OnContentLoad) = remoteDataSource.getNote(onContentLoad)
     suspend fun getPostsFromDB() = localDataSource.getPosts()
     suspend fun savePosts(posts: List<Post>) = localDataSource.savePosts(posts)
 }

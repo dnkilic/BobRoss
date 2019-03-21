@@ -8,9 +8,11 @@ import kotlinx.coroutines.Deferred
 import retrofit2.Response
 import javax.inject.Inject
 
-private const val URL = "http://pastebin.com/raw/wgkJgazE"
+private const val POST_URL = "http://pastebin.com/raw/wgkJgazE"
+private const val NOTE_URL = "https://www.w3schools.com/xml/note.xml"
 
 class RemoteDataSource @Inject constructor(private val postService: PostService) {
     fun getPostsAsync(): Deferred<Response<List<Post>>> = postService.getPostList()
-    fun getPosts(onContentLoad: OnContentLoad) = BobRoss.content().request(URL,  onContentLoad)
+    fun getPosts(onContentLoad: OnContentLoad) = BobRoss.content().request(POST_URL,  onContentLoad)
+    fun getNote(onContentLoad: OnContentLoad) = BobRoss.content().request(NOTE_URL,  onContentLoad)
 }

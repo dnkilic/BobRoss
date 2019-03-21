@@ -13,7 +13,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:textSize="@dimen/text_size_24sp"
+                android:textSize="@dimen/text_size_24"
                 android:fontFamily="@font/helvetica_neue"
                 android:visibility="gone"
                 tools:text="Error"/>
@@ -30,6 +30,16 @@
                 android:layout_height="match_parent"
                 tools:listitem="@layout/item_post"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab"
+                android:src="@drawable/ic_http"
+                android:layout_margin="@dimen/post_item_margin"
+                android:layout_gravity="bottom|end"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:elevation="@dimen/fab_elevation"
+                app:rippleColor="@color/black"/>
 
     </FrameLayout>
 </layout>
