@@ -15,4 +15,7 @@ class PostRepository @Inject constructor(private val localDataSource: LocalDataS
     fun getNoteFromAPI(onContentLoad: OnContentLoad) = remoteDataSource.getNote(onContentLoad)
     suspend fun getPostsFromDB() = localDataSource.getPosts()
     suspend fun savePosts(posts: List<Post>) = localDataSource.savePosts(posts)
+    suspend fun favorite(post: Post) = localDataSource.favorite(post)
+    suspend fun getPostById(id: String) = localDataSource.getPostById(id)
+    suspend fun isFavourited(id: String) = localDataSource.isFavourited(id)
 }

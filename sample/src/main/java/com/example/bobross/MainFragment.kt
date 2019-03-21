@@ -32,10 +32,19 @@ class MainFragment : BaseFragment() {
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.main_fragment, container,
             false)
-
         dataset = mutableListOf()
-        viewAdapter = PostAdapter(dataset)
+        viewAdapter = PostAdapter(dataset) { post, position ->
+            viewModel.favorite(post, position)
+        }
         binding.recyclerView.adapter = viewAdapter
+        binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                if (dy > 0)
+                    binding.fab.hide()
+                else if (dy < 0)
+                    binding.fab.show()
+            }
+        })
         binding.fab.setOnClickListener { viewModel.getNote() }
 
         return binding.root
@@ -74,6 +83,13 @@ class MainFragment : BaseFragment() {
                 }
             }
         })
-    }
 
+        viewModel.favorite.observe(this, Observer {
+            if (it.updatedPost != null) {
+                viewAdapter.notifyItemChanged(it.position!!)
+            } else {
+                // show error snackbar
+            }
+        })
+    }
 }

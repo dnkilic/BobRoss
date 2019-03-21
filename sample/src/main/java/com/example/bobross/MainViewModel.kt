@@ -8,10 +8,7 @@ import com.example.bobross.repository.PostRepository
 import com.example.bobross.repository.model.*
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import java.io.IOException
 import java.net.UnknownHostException
 import javax.inject.Inject
@@ -25,6 +22,10 @@ class MainViewModel @Inject constructor(private var repository: PostRepository) 
     private var syncNotes = MutableLiveData<NoteCommand>()
     val notes : MutableLiveData<NoteCommand>
         get() = syncNotes
+
+    private var favoriteResult = MutableLiveData<FavoriteCommand>()
+    val favorite : MutableLiveData<FavoriteCommand>
+        get() = favoriteResult
 
     fun getPosts() {
         syncPosts.value = Command.Loading
@@ -47,6 +48,15 @@ class MainViewModel @Inject constructor(private var repository: PostRepository) 
                     withContext(Dispatchers.Main) {
                         val posts = generateResponse(response)
                         if (posts != null && posts.isNotEmpty()) {
+                            posts.forEach {
+                                repository.isFavourited(it.id)?.let { favourited ->
+                                    if (favourited) {
+                                        it.likes++
+                                        it.likedByUser = true
+                                    }
+                                }
+                            }
+
                             syncPosts.value = Command.Success(posts)
                             repository.savePosts(posts)
                         } else {
@@ -108,5 +118,15 @@ class MainViewModel @Inject constructor(private var repository: PostRepository) 
         val heading = xml[4].trim().removePrefix("<heading>").removeSuffix("</heading>")
         val body =  xml[5].trim().removePrefix("<body>").removeSuffix("</body>")
         return "$heading: $body"
+    }
+
+    fun favorite(post: Post, position: Int) {
+        CoroutineScope(Dispatchers.IO).launch {
+            withContext(Dispatchers.Main) {
+                async { repository.favorite(post) }.await()
+                val updatedPost = repository.getPostById(post.id)
+                favoriteResult.value = FavoriteCommand(updatedPost, position)
+            }
+        }
     }
 }

@@ -1,10 +1,7 @@
 package com.example.bobross.repository.local.db
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
+import androidx.room.*
 import androidx.room.OnConflictStrategy.REPLACE
-import androidx.room.Query
 import com.example.bobross.repository.model.Post
 
 @Dao
@@ -27,4 +24,10 @@ interface PostDataDao {
 
     @Query("DELETE FROM post WHERE id == :id")
     fun deletePostById(id: String)
+
+    @Update
+    suspend fun favorite(posts: Post)
+
+    @Query("SELECT likedByUser FROM post WHERE id == :id")
+    suspend fun isFavourited(id: String): Boolean?
 }

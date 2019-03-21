@@ -5,6 +5,7 @@
     <dimen name="profile_image_size">40dp</dimen>
     <dimen name="post_list_item_padding">20dp</dimen>
     <dimen name="fab_elevation">10dp</dimen>
+    <dimen name="favorite_button_padding">10dp</dimen>
 
     <dimen name="text_size_14">14sp</dimen>
     <dimen name="text_size_24">24sp</dimen>

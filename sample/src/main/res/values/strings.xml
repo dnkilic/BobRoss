@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Sample</string>
     <string name="content_description_image">image</string>
+    <string name="content_description_favorite">favorite button</string>
     <string name="content_description_profile_image">profile image</string>
 
     <plurals name="like">

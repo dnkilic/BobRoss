@@ -37,6 +37,19 @@
                 tools:src="@mipmap/ic_launcher"
                 android:contentDescription="@string/content_description_image"/>
 
+        <ImageButton
+                android:id="@+id/favorite"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:paddingTop="@dimen/favorite_button_padding"
+                android:paddingBottom="@dimen/favorite_button_padding"
+                android:src="@{item.likedByUser ? @drawable/ic_favorite : @drawable/ic_favorite_border}"
+                app:layout_constraintTop_toBottomOf="@id/image"
+                app:layout_constraintStart_toStartOf="@id/startGuideline"
+                tools:src="@drawable/ic_favorite_border"
+                android:contentDescription="@string/content_description_image"/>
+
         <TextView
                 android:id="@+id/like"
                 android:layout_width="wrap_content"
@@ -47,7 +60,7 @@
                 android:textStyle="bold"
                 android:text="@{@plurals/like(item.likes, item.likes)}"
                 android:layout_marginTop="@dimen/post_detail_margin"
-                app:layout_constraintTop_toBottomOf="@id/image"
+                app:layout_constraintTop_toBottomOf="@id/favorite"
                 app:layout_constraintStart_toStartOf="@id/startGuideline"
                 tools:text="19 likes"/>
 
