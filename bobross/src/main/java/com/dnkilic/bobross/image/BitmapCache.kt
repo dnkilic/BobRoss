@@ -12,10 +12,15 @@ internal class BitmapCache(size: Int): BobRossCache<Bitmap>(size) {
     companion object {
         private var instance: BitmapCache? = null
 
-        fun getInstance(): BitmapCache {
+        fun getInstance(cacheRate: Int = CACHE_RATE): BitmapCache {
             if (instance == null) {
                 val maxMemory = (Runtime.getRuntime().maxMemory() / ONE_KB).toInt()
-                val cacheSize = maxMemory / CACHE_RATE
+                val cacheSize = if (cacheRate == 0) {
+                   0
+                } else {
+                    maxMemory / cacheRate
+                }
+
                 instance = BitmapCache(cacheSize)
             }
             return instance as BitmapCache

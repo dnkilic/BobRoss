@@ -12,11 +12,17 @@ internal class BitmapFetcher(
     private val urlStr: String?,
     private val imageView: ImageView,
     private val imageStyle: ImageStyle?,
-    private val errorPlaceHolderRes: Int?
+    private val errorPlaceHolderRes: Int?,
+    private val cacheRate: Int?
 ): Fetcher {
 
     private fun getBitmap(): Bitmap? {
-        val bitmapCache = BitmapCache.getInstance()
+        val bitmapCache = if (cacheRate != null) {
+            BitmapCache.getInstance(cacheRate)
+        } else {
+            BitmapCache.getInstance()
+        }
+
         var bitmap = bitmapCache.get(urlStr)
         if (bitmap == null) {
             bitmap = urlStr!!.getBitmapFromUrl()

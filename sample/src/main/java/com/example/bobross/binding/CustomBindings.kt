@@ -20,5 +20,6 @@ fun setRoundedImageUrl(imageView: ImageView, url: String?) {
         .load(url)
         .error(R.drawable.ic_person)
         .apply(ImageStyle.ROUND)
+        .configureCache(0)
         .asImageInto(imageView)
 }

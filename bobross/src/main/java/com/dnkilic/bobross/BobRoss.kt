@@ -16,6 +16,7 @@ class BobRoss {
     private var imageStyle: ImageStyle? = null
     private var errorPlaceHolderRes: Int? = null
     private var listener: OnContentLoad? = null
+    private var cacheRate: Int? = null
 
     companion object {
         private var context: WeakReference<Context>? = null
@@ -97,7 +98,7 @@ class BobRoss {
             "ImageView should not be null."
         }
 
-        val bitmapFetcher = BitmapFetcher(url, imageView, imageStyle, errorPlaceHolderRes)
+        val bitmapFetcher = BitmapFetcher(url, imageView, imageStyle, errorPlaceHolderRes, cacheRate)
         bitmapFetcher.fetch()
     }
 
@@ -111,6 +112,15 @@ class BobRoss {
         }
 
         this.errorPlaceHolderRes = errorPlaceHolderRes
+        return getBobRoss()
+    }
+
+    /**
+     * Configure cache totalSize / rate
+     * @param rate
+     */
+    fun configureCache(rate: Int): BobRoss {
+        this.cacheRate = rate
         return getBobRoss()
     }
 }
