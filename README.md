@@ -1,7 +1,6 @@
 # BobRoss
 
 BobRoss is an Android content loading library. Its able to load image, json and xml content while caching for efficient user experience.
-
 <p align="center">
   <img src="/screenshots/bobross.jpeg" width="200" title="Bob Ross">
 </p>
@@ -15,19 +14,16 @@ As you can see from the [commit history](https://github.com/dnkilic/BobRoss/comm
 </p>
 
 I used **Retrofit2** to fetch api, **Room** to save posts into DB, **kotlin coroutines** to perform network and db actions from background and **Glide** to show images. Following screenshot shows the sample application after first phase is completed. 
-
 <p align="center">
   <img src="/screenshots/phase1.png" width="200" title="First Phase">
 </p>
 
 During second phase BobRoss library is implemented. My main focus was simplicity of its interface. Library is able to fetch images, json and xml with memory caching functionality. I used Anko to perform background tasks. **At the end of Phase 2, I replaced Retrofit and Glide with BobRoss**. Following screenshot shows the sample application after second phase is completed. 
-
 <p align="center">
   <img src="/screenshots/phase2.png" width="200" title="Second Phase">
 </p>
 
 During the third phase, I improved image loading capabilities by adding new features like **supporting error placeholder**. I added some extra features like **xml fetching** as well. 
-
 <p align="center">
   <img src="/screenshots/phase3.png" width="200" title="Third Phase">
 </p>
